@@ -42,4 +42,12 @@ brief or handoff names.
   Runbook section with exact commands and the data safety rules from
   PLAN.md that apply.
 - Run pre-commit on the new files.
+- Spawn one general-purpose subagent to review the brief and blank files
+  (edit only those): check APIs, flags and runbook commands against
+  current docs; make sure each blank is worth reasoning about in an
+  interview and isn't ambiguous; add missing concepts or end-of-phase
+  questions only if genuinely useful. It must keep the `...` count equal
+  to the `TODO(you)` count, keep blanks failing, run no write or server
+  commands, rerun pre-commit, and report what it changed. Review its
+  diff before handing off.
 - Tell the user, in two lines, which tutor model to start, and stop.
