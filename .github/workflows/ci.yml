@@ -33,26 +33,26 @@ jobs:
       run:
         # TODO(you) [CI]: the folder, relative to the repo root, that holds
         # the harness pyproject.toml.
-        working-directory: ...
+        working-directory: harness
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # TODO(you) [CI]: install uv with the astral-sh/setup-uv action,
       # pinned like checkout is: `owner/repo@<sha> # vX`. The SHA for
       # v10.3.3 is 68559e99cc807c1eb7e9238fd43a15bba460eec2.
-      - uses: ...
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
       # TODO(you) [CI]: install the exact versions in uv.lock. Add the flag
       # that makes uv fail if uv.lock doesn't match pyproject.toml, instead
       # of quietly resolving new versions.
-      - run: ...
+      - run: uv sync --locked
       - run: uv run ruff check .
       # TODO(you) [CI]: check formatting without rewriting files.
       # `ruff format` rewrites; one flag makes it only report and fail.
-      - run: ...
+      - run: uv run ruff format --check
       # TODO(you) [CI]: run the type checker from the dev dependencies.
-      - run: ...
+      - run: uv run pyright .
       - run: uv run pytest
       # The pre-commit hook's tests live outside harness/, so this step
       # overrides the job default for itself only.
       # TODO(you) [CI]: the repo root, as a path relative to the repo root.
-      - working-directory: ...
+      - working-directory: .
         run: uvx pytest scripts
