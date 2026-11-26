@@ -1,0 +1,58 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# LEARN [SEC]: least privilege for the workflow token. Jobs only read code.
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      # LEARN [SEC]: actions are pinned to a commit SHA, not a tag. A tag can
+      # be moved to malicious code; a SHA can't (supply-chain attacks).
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # full history, so gitleaks scans every commit
+      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Lint, type-check and test the harness package on every PR and push.
+  # LEARN [CI]: every job runs on a fresh VM. Nothing is shared with the
+  # `secrets` job above unless you pass it explicitly (artifacts, outputs).
+  harness:
+    runs-on: ubuntu-latest
+    # LEARN [CI]: defaults.run applies to every `run:` step in this job.
+    # It does not apply to `uses:` steps.
+    defaults:
+      run:
+        # TODO(you) [CI]: the folder, relative to the repo root, that holds
+        # the harness pyproject.toml.
+        working-directory: ...
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # TODO(you) [CI]: install uv with the astral-sh/setup-uv action,
+      # pinned like checkout is: `owner/repo@<sha> # vX`. The SHA for
+      # v10.3.3 is 68559e99cc807c1eb7e9238fd43a15bba460eec2.
+      - uses: ...
+      # TODO(you) [CI]: install the exact versions in uv.lock. Add the flag
+      # that makes uv fail if uv.lock doesn't match pyproject.toml, instead
+      # of quietly resolving new versions.
+      - run: ...
+      - run: uv run ruff check .
+      # TODO(you) [CI]: check formatting without rewriting files.
+      # `ruff format` rewrites; one flag makes it only report and fail.
+      - run: ...
+      # TODO(you) [CI]: run the type checker from the dev dependencies.
+      - run: ...
+      - run: uv run pytest
+      # The pre-commit hook's tests live outside harness/, so this step
+      # overrides the job default for itself only.
+      # TODO(you) [CI]: the repo root, as a path relative to the repo root.
+      - working-directory: ...
+        run: uvx pytest scripts

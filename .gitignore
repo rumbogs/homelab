@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Terraform: state and real values never go in git
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.auto.tfvars
+terraform.tfvars
+!*.example.tfvars
+
+# Secrets: only SOPS-encrypted files (*.sops.yaml) are committed
+*.agekey
+*.decrypted.*
+.env
+.env.*
+!.env.example
+
+# Local overrides
+*.local.*
+
+# macOS
+.DS_Store
+
+# Tutor to orchestrator handoff notes (private)
+.handoff/
