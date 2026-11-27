@@ -36,9 +36,42 @@ help the user finish it themselves, then hand back.
 - Never put private info in repo files: no names, emails, real IPs,
   hostnames or domains.
 
+## PR description
+
+Every phase ends in a PR. The user opens it (`gh pr create`); you write
+its description.
+
+1. Wait until the user says the PR is open. If `gh pr view` finds none
+   for the current branch, ask them to open one. Don't open it yourself.
+2. Base the description only on facts: read `gh pr diff` and
+   `gh pr view --json title,files,commits`, and use the check output you
+   saw this session. Don't describe changes the diff doesn't contain.
+3. Write it to a temp file and apply it with
+   `gh pr edit --body-file <file>`. Use this shape:
+
+   ```markdown
+   ## Phase NN: <name>
+
+   <one or two sentences: the goal, from the brief>
+
+   ## Changes
+
+   - `<path>`: <what changed and why, one line per file>
+
+   ## How it was verified
+
+   - <each check command run and its result>
+
+   Brief: `docs/phases/NN-name.md`
+   ```
+
+4. Cover every file in the diff. No private info (see Rules). Then show
+   the user the PR link.
+
 ## Finish
 
-When the brief's "Done when" is met, write `.handoff/<brief-name>.md`:
+When the brief's "Done when" is met and the PR description is written,
+write `.handoff/<brief-name>.md`:
 
 ```markdown
 # Handoff: <brief name>
