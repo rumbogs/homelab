@@ -11,8 +11,7 @@ grep -rn --exclude-dir=.venv -E "TODO\(you\)|LEARN \[" .
 
 | Tag | Where | What |
 |---|---|---|
-| CI SEC | `.github/rulesets/main.jq` | Ruleset for main: 6 blanks (phase 03) |
-| ARCH | `docs/adr/0001-kubernetes-on-a-single-node.md` | Argue for (and against) Kubernetes in your own words |
+| ARCH K8S | `docs/adr/0001-kubernetes-on-a-single-node.md` | Argue for (and against) Kubernetes: 4 blanks (phase 04) |
 
 ## LEARN
 
@@ -30,3 +29,4 @@ grep -rn --exclude-dir=.venv -E "TODO\(you\)|LEARN \[" .
 |---|---|---|
 | PY SEC | Tests for check_private (phase 01) | 2026-11-26 |
 | CI | Harness CI job, `uv sync --locked` (phase 02) | 2026-11-26 |
+| CI SEC | Ruleset for main, leak PR blocked (phase 03) | 2026-11-26 |
